@@ -1,0 +1,56 @@
+.form {
+  display: grid;
+  gap: 18px;
+}
+
+.field {
+  display: grid;
+  gap: 8px;
+}
+
+.label {
+  color: #155979;
+  font-size: 0.88rem;
+  font-weight: 650;
+}
+
+.input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 15px;
+  border: 1px solid #b9dce8;
+  border-radius: 14px;
+  outline: none;
+  background: rgb(255 255 255 / 78%);
+  box-shadow: inset 0 2px 4px rgb(34 119 153 / 5%);
+  color: #164e68;
+  font: inherit;
+  transition: border-color 160ms ease, box-shadow 160ms ease, background 160ms ease;
+}
+
+.input::placeholder {
+  color: #8baab7;
+}
+
+.input:focus {
+  border-color: #3ab8d4;
+  background: #fff;
+  box-shadow: 0 0 0 4px rgb(58 184 212 / 17%);
+}
+
+.message {
+  margin: 0;
+  color: #b34450;
+  font-size: 0.88rem;
+}
+
+.address {
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid rgb(75 177 155 / 25%);
+  border-radius: 12px;
+  background: rgb(224 250 242 / 78%);
+  color: #267c6b;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}

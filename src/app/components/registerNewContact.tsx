@@ -2,8 +2,8 @@
 import { useState, useEffect } from "react";
 import styles from "./registerNewContact.module.css";
 import type { Contact } from "../page";
-import { match } from "assert";
 import { formatPhoneNumber, normalizePhoneNumber, PHONE_NUMBER_LENGTH } from "../utils/formatPhoneNumber";
+import { formatCep } from "../utils/formatCep";
 
 export function RegisterNewContact({onAdd}: {onAdd: (newContact: Contact) => void}) {
     const [newContact, setNewContact] = useState<Omit<Contact, "id">>({
@@ -71,7 +71,13 @@ export function RegisterNewContact({onAdd}: {onAdd: (newContact: Contact) => voi
                     placeholder="Ex.: Ana Silva"
                     required
                     value={newContact.name}
-                    onChange={(e) => setNewContact(prev => ({ ...prev, name: e.target.value }))}
+                    onChange={(e) => {
+                        setError("");
+                        setNewContact(prev => ({
+                            ...prev,
+                            name: e.target.value,
+                        }));
+                    }}
                 />
             </div>
             <div className={styles.field}>
@@ -102,16 +108,19 @@ export function RegisterNewContact({onAdd}: {onAdd: (newContact: Contact) => voi
                     type="text"
                     id="cep"
                     name="cep"
-                    placeholder="Digite os 8 numeros do CEP"
+                    placeholder="Digite os 9 numeros do CEP"
                     inputMode="numeric"
-                    maxLength={8}
+                    
                     required
-                    value={newContact.cep}
-                    onChange={(e) => setNewContact(prev => ({
+                    value={formatCep(newContact.cep)}
+                    onChange={(e) => {
+                        setError("");
+                        setNewContact(prev => ({
                         ...prev,
                         cep: e.target.value.replace(/\D/g, ''),
                         address: '',
-                    }))}
+                        }));
+                    }}
                 />
             </div>
             {loading && <p className={styles.status} role="status">Buscando endereço...</p>}

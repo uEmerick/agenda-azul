@@ -15,11 +15,11 @@ export type Contact = {
 
 export default function Home() {
 
-  const [Contacts, setContacts] = useState<Contact[]>([]);
+  const [contacts, setContacts] = useState<Contact[]>([]);
   const [showForm, setShowForm] = useState(true);
 
-  const addContact = (New : Contact) => {
-    setContacts(prev => [...prev, New]);
+  const addContact = (newContact : Contact) => {
+    setContacts(prev => [...prev, newContact]);
     setShowForm(false); // depois de cadastrar, volta para a lista
   }
 
@@ -38,7 +38,7 @@ export default function Home() {
           </p>
         </header>
 
-        {showForm || Contacts.length === 0 ? (
+        {showForm || contacts.length === 0 ? (
         <section className={styles.panel} aria-labelledby="new-contact-title">
           <h2 className={styles.panelTitle} id="new-contact-title">
             Novo contato
@@ -47,7 +47,7 @@ export default function Home() {
             Preencha os dados para adicionar alguém especial à sua agenda.
           </p>
           <RegisterNewContact onAdd={addContact} />
-          {Contacts.length > 0 && (
+          {contacts.length > 0 && (
             <button className={styles.backButton} type="button" onClick={() => setShowForm(false)}>
               Voltar para a lista
             </button>
@@ -66,7 +66,7 @@ export default function Home() {
               Contatos
             </h2>
             <div className={styles.list}>
-              {Contacts.map(c => (
+              {contacts.map(c => (
                 <ContactCard key={c.id} contact={c} onDelete={deleteContact} />
               ))}
             </div>

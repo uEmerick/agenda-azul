@@ -3,8 +3,15 @@ import { useState, useEffect } from "react";
 import styles from "./registerNewContact.module.css";
 import type { Contact } from "../page";
 import { match } from "assert";
+import { formatPhoneNumber, normalizePhoneNumber, PHONE_NUMBER_LENGTH } from "../utils/formatPhoneNumber";
 
 export function RegisterNewContact({onAdd}: {onAdd: (newContact: Contact) => void}) {
+    const [newContact, setNewContact] = useState<Omit<Contact, "id">>({
+        name: "",
+        phone: "",
+        cep: "",
+        address: "",
+    });
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -39,13 +46,21 @@ export function RegisterNewContact({onAdd}: {onAdd: (newContact: Contact) => voi
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (newContact.phone.length !== PHONE_NUMBER_LENGTH) {
+            setError("Informe um celular válido com DDD (11 dígitos).");
+            return;
+        }
+        if (!newContact.address) {
+            setError("Informe um CEP válido antes de cadastrar");
+            return;
+        }
         const id = Math.random().toString(36).substring(2, 10);
-        onAdd({...contact, id});
-        setContact({name: "", phone: "", cep: "", address: ""});
+        onAdd({...newContact, id});
+        setNewContact({name: "", phone: "", cep: "", address: ""});
     };
 
     return (
-        <form className={styles.form}>
+        <form className={styles.form} onSubmit={handleSubmit}>
             <div className={styles.field}>
                 <label className={styles.label} htmlFor="name">Nome</label>
                 <input
@@ -67,9 +82,17 @@ export function RegisterNewContact({onAdd}: {onAdd: (newContact: Contact) => voi
                     id="phone"
                     name="phone"
                     placeholder="(00) 00000-0000"
+                    inputMode="numeric"
+                    maxLength={15}
                     required
-                    value={newContact.phone}
-                    onChange={(e) => setNewContact(prev => ({ ...prev, phone: e.target.value }))}
+                    value={formatPhoneNumber(newContact.phone)}
+                    onChange={(e) => {
+                        setError("");
+                        setNewContact(prev => ({
+                            ...prev,
+                            phone: normalizePhoneNumber(e.target.value),
+                        }));
+                    }}
                 />
             </div>
             <div className={styles.field}>
@@ -91,9 +114,10 @@ export function RegisterNewContact({onAdd}: {onAdd: (newContact: Contact) => voi
                     }))}
                 />
             </div>
-            {loading && <p className={styles.message} role="status">Buscando endereço...</p>}
+            {loading && <p className={styles.status} role="status">Buscando endereço...</p>}
             {error && <p className={styles.message} role="alert">{error}</p>}
-            {newContact.address && <p className={styles.address}>{newContact.address}</p>}
+            {newContact.address && <p className={styles.address} role="status">Endereço encontrado: {newContact.address}</p>}
+            <button className={styles.button} type="submit">Adicionar</button>
         </form>
-    );
+    )
 }

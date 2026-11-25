@@ -1,0 +1,135 @@
+.card {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 18px;
+  overflow: hidden;
+  padding: 20px 22px;
+  border: 1px solid rgb(255 255 255 / 82%);
+  border-radius: 22px;
+  background: linear-gradient(145deg, rgb(255 255 255 / 84%), rgb(230 250 255 / 65%));
+  box-shadow:
+    0 14px 40px rgb(22 104 153 / 16%),
+    inset 0 2px 0 rgb(255 255 255 / 95%);
+  backdrop-filter: blur(18px);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+/* Reflexo de vidro na metade superior */
+.card::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0 0 50%;
+  border-radius: 22px 22px 60% 60% / 22px 22px 18px 18px;
+  background: linear-gradient(180deg, rgb(255 255 255 / 70%), rgb(255 255 255 / 0%));
+  content: "";
+  pointer-events: none;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 20px 50px rgb(22 104 153 / 22%),
+    inset 0 2px 0 rgb(255 255 255 / 95%);
+}
+
+/* Bolha com a inicial do contato */
+.avatar {
+  position: relative;
+  display: grid;
+  width: 52px;
+  height: 52px;
+  place-items: center;
+  border: 1px solid rgb(255 255 255 / 85%);
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 32% 28%, rgb(255 255 255 / 95%), transparent 38%),
+    linear-gradient(160deg, #8ff0ff 0%, #3ab8d4 55%, #1a86b8 100%);
+  box-shadow:
+    0 6px 16px rgb(26 134 184 / 30%),
+    inset 0 -4px 10px rgb(10 80 120 / 25%);
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: 700;
+  text-shadow: 0 1px 2px rgb(7 81 122 / 45%);
+}
+
+.info {
+  display: grid;
+  min-width: 0;
+  gap: 4px;
+}
+
+.name {
+  overflow: hidden;
+  color: #0c5c83;
+  font-size: 1.1rem;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.phone {
+  color: #167da5;
+  font-size: 0.94rem;
+  font-weight: 600;
+}
+
+.address {
+  color: #568097;
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+/* Botão "pílula" brilhante, estilo Aero */
+.deleteButton {
+  position: relative;
+  min-height: 38px;
+  padding: 0 18px;
+  overflow: hidden;
+  border: 1px solid rgb(179 68 80 / 35%);
+  border-radius: 999px;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 75%) 0%, rgb(255 255 255 / 15%) 50%, transparent 51%),
+    linear-gradient(180deg, #ffd3d8 0%, #f2959f 100%);
+  box-shadow:
+    0 4px 12px rgb(179 68 80 / 18%),
+    inset 0 1px 0 rgb(255 255 255 / 90%);
+  color: #8f2f3a;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 650;
+  text-shadow: 0 1px 0 rgb(255 255 255 / 60%);
+  transition: filter 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+}
+
+.deleteButton:hover {
+  filter: brightness(1.05) saturate(1.15);
+  box-shadow:
+    0 6px 16px rgb(179 68 80 / 26%),
+    inset 0 1px 0 rgb(255 255 255 / 90%);
+}
+
+.deleteButton:active {
+  transform: translateY(1px);
+}
+
+.deleteButton:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 4px rgb(179 68 80 / 20%);
+}
+
+@media (max-width: 600px) {
+  .card {
+    grid-template-columns: auto 1fr;
+    padding: 18px;
+  }
+
+  .deleteButton {
+    grid-column: 1 / -1;
+    width: 100%;
+  }
+}

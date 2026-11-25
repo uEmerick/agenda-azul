@@ -1,11 +1,12 @@
-"use cliente";
-import { useState, useEffect  } from "react";
+"use client";
+import { useState } from "react";
 import { RegisterNewContact } from "./components/registerNewContact";
+import { ContactCard } from "./components/contactCard";
 import styles from "./page.module.css";
 
 
 export type Contact = {
-  id: number;
+  id: string;
   name: string;
   phone: string;
   cep: string;
@@ -15,12 +16,14 @@ export type Contact = {
 export default function Home() {
 
   const [Contacts, setContacts] = useState<Contact[]>([]);
+  const [showForm, setShowForm] = useState(true);
 
   const addContact = (New : Contact) => {
     setContacts(prev => [...prev, New]);
+    setShowForm(false); // depois de cadastrar, volta para a lista
   }
 
-  const deleteContact = (id : number) => {
+  const deleteContact = (id : string) => {
     setContacts(prev => prev.filter(c => c.id !== id))
   };
 
@@ -35,7 +38,7 @@ export default function Home() {
           </p>
         </header>
 
-        {Contacts.length === 0 ? (
+        {showForm || Contacts.length === 0 ? (
         <section className={styles.panel} aria-labelledby="new-contact-title">
           <h2 className={styles.panelTitle} id="new-contact-title">
             Novo contato
@@ -44,15 +47,32 @@ export default function Home() {
             Preencha os dados para adicionar alguém especial à sua agenda.
           </p>
           <RegisterNewContact onAdd={addContact} />
+          {Contacts.length > 0 && (
+            <button className={styles.backButton} type="button" onClick={() => setShowForm(false)}>
+              Voltar para a lista
+            </button>
+          )}
         </section>
         ) : (
-          <div>
-            {Contacts.map(c => (
-              <ContactCard key={c.id} contact={c} onDelete={deleteContact} />
-            ))}
+          <div className={styles.panel} aria-labelledby="contacts-title">
+            <button className={styles.button} onClick={() => setShowForm(true)}>
+              Adicionar novo contato
+            </button>
+            
+            <p className={styles.panelDescription}>
+              Clique em "Excluir" para remover um contato da sua agenda.
+            </p>
+            <h2 className={styles.panelTitle} id="contacts-title">
+              Contatos
+            </h2>
+            <div className={styles.list}>
+              {Contacts.map(c => (
+                <ContactCard key={c.id} contact={c} onDelete={deleteContact} />
+              ))}
+            </div>
           </div>
         )
-
+        }
         <footer className={styles.footer}>Simples, leve e sempre por perto.</footer>
       </div>
     </main>

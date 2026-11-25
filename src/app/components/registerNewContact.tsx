@@ -1,22 +1,10 @@
 "use client";
 import { useState, useEffect } from "react";
 import styles from "./registerNewContact.module.css";
+import type { Contact } from "../page";
+import { match } from "assert";
 
-type Contact = {
-    name: string;
-    phone: string;
-    cep: string;
-    address: string;
-};
-
-export function RegisterNewContact() {
-
-    const [newContact, setNewContact] = useState<Contact>({
-        name: "",
-        phone: "",
-        cep: "",
-        address: "",
-    });
+export function RegisterNewContact({onAdd}: {onAdd: (newContact: Contact) => void}) {
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -48,6 +36,13 @@ export function RegisterNewContact() {
             });
 
     }, [newContact.cep]);
+
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        const id = Math.random().toString(36).substring(2, 10);
+        onAdd({...contact, id});
+        setContact({name: "", phone: "", cep: "", address: ""});
+    };
 
     return (
         <form className={styles.form}>

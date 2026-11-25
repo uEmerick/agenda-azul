@@ -1,7 +1,29 @@
+"use cliente";
+import { useState, useEffect  } from "react";
 import { RegisterNewContact } from "./components/registerNewContact";
 import styles from "./page.module.css";
 
+
+export type Contact = {
+  id: number;
+  name: string;
+  phone: string;
+  cep: string;
+  address: string;
+};
+
 export default function Home() {
+
+  const [Contacts, setContacts] = useState<Contact[]>([]);
+
+  const addContact = (New : Contact) => {
+    setContacts(prev => [...prev, New]);
+  }
+
+  const deleteContact = (id : number) => {
+    setContacts(prev => prev.filter(c => c.id !== id))
+  };
+
   return (
     <main className={styles.page}>
       <div className={styles.content}>
@@ -13,6 +35,7 @@ export default function Home() {
           </p>
         </header>
 
+        {Contacts.length === 0 ? (
         <section className={styles.panel} aria-labelledby="new-contact-title">
           <h2 className={styles.panelTitle} id="new-contact-title">
             Novo contato
@@ -20,8 +43,15 @@ export default function Home() {
           <p className={styles.panelDescription}>
             Preencha os dados para adicionar alguém especial à sua agenda.
           </p>
-          <RegisterNewContact />
+          <RegisterNewContact onAdd={addContact} />
         </section>
+        ) : (
+          <div>
+            {Contacts.map(c => (
+              <ContactCard key={c.id} contact={c} onDelete={deleteContact} />
+            ))}
+          </div>
+        )
 
         <footer className={styles.footer}>Simples, leve e sempre por perto.</footer>
       </div>
